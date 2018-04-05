@@ -42,7 +42,8 @@ class UsersController < ApplicationController
   
   def favorites
     @user = User.find(params[:id])
-    @microposts = @user.favorite_microposts.page(params[:page])
+    @microposts = @user.favorite_microposts.order("created_at DESC").page(params[:page])
+    
   end
   
   private
@@ -52,8 +53,8 @@ class UsersController < ApplicationController
   end
   
   def correct_user
-    @micropost = current_user.microposts.find_by(id: params[:id])
-    unless @micropost
+    @user = User.find(params[:id])
+    unless current_user.id == @user.id
       redirect_to root_url
     end
   end
